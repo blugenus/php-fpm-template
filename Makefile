@@ -1,13 +1,26 @@
+#!/usr/bin/make
+
+SHELL = /bin/sh
+
+UID = $(shell id -u)
+GID := $(shell id -g)
+
 docker.build:
-	docker compose build
+	UID=$(UID) GID=$(GID) docker-compose build
 
-docker.start:
-	docker compose up -d
+docker.build.no-cache:
+	UID=$(UID) GID=$(GID) docker-compose build --no-cache
 
-docker.end:
+docker.up:
+	UID=${UID} GID=${GID} docker compose up -d
+
+docker.down:
 	docker compose down -v
 
-sh.php:
+docker.logs:
+	docker compose logs
+
+sh.php-fpm:
 	docker compose exec php-fpm sh
 
 sh.nginx:
